@@ -1,0 +1,15 @@
+defaults:
+  - dataset: config
+  - model: attention
+  - settings: config
+  - _self_
+
+hydra:
+  job:
+    chdir: true
+  sweep:
+    subdir: ${hydra.job.override_dirname}
+
+seed: 0
+use_cuda: true
+tmp: 10-90
