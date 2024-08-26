@@ -6,16 +6,15 @@ import hydra
 import numpy as np
 import torch
 import torch.optim as optim
-from torchvision.utils import make_grid
+from torchvision.utils import save_image
 
 from dataset import MyDataset
 from model import Attention, Additive
 
 
 def save_img(X, path='./img/', filename='img', nrow=4, mean=torch.tensor([0.5]), std=torch.tensor([0.5])):
-    X = make_grid(X, nrow=nrow, padding=0)[0]
     X = X * std + mean
-    np.savetxt(path + filename, X.numpy(), delimiter=',')
+    save_image(X, path + filename, nrow=nrow, padding=0)
 
 
 def save_score(S, path=f'./score/', filename='score', nrow=4):
@@ -129,7 +128,7 @@ def main(cfg: DictConfig):
                     cnt[j] += 1
                     X = X.detach().cpu()[0]
                     A = score[0].detach().cpu()[0]
-                    save_img(X, filename=f'img_{j}_{k}.csv', nrow=int(np.sqrt(cfg.dataset.bag_size)))
+                    save_img(X, filename=f'img_{j}_{k}.png', nrow=int(np.sqrt(cfg.dataset.bag_size)))
                     save_score(A, filename=f'score_{j}_{k}.csv', nrow=int(np.sqrt(cfg.dataset.bag_size)))
                     if cfg.model.name == 'additive':
                         P = score[1].detach().cpu()[0]
